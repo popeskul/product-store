@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+option go_package = "pkg/domain";
+
+service ProductsService {
+  rpc Fetch(FetchRequest) returns (Empty) {}
+  rpc List(ListRequest) returns (ListResponse) {}
+}
+
+message FetchRequest {
+  string url = 1;
+}
+
+message Empty {}
+
+message ListRequest {
+  ListPagingParams paging = 1;
+  ListSortingParams sorting = 2;
+}
+
+message ListPagingParams {
+  int32 page = 1;
+  int32 per_page = 2;
+}
+
+message ListSortingParams {
+  enum SortingType {
+    name = 0;
+    price = 1;
+    changes_count = 2;
+    timestamp = 3;
+  }
+  enum SortDirection {
+    asc = 0;
+    desc = 1;
+  }
+
+  SortingType sort_by = 1;
+  SortDirection sort_direction = 2;
+}
+
+message ListResponse {
+  repeated Product products = 1;
+  int32 total = 2;
+}
+
+message Product {
+  string name = 2;
+  float price = 4;
+}
